@@ -11,7 +11,8 @@ sudo dnf install jenkins -y
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 
-
+# Install Git
+sudo dnf install git -y
 
 # Install AWS CLI
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
@@ -34,5 +35,5 @@ sudo mkdir -p $HOME/bin && sudo cp ./kubectl $HOME/bin/kubectl && export PATH=$P
 sudo dnf install -y python3
 
 # Reboot to ensure all changes take effect
-reboot
+sudo reboot
 
