@@ -1,7 +1,4 @@
 
-.pytest_cache/
-__pycache__/
-app.pyc
 .terraform/*
 terraform.tfstate
 terraform.tfstate.backup
