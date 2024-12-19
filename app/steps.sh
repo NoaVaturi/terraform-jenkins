@@ -11,7 +11,7 @@ source env/bin/activate
 echo "Current directory: $(pwd)"
 
 # Install dependencies from requirements.txt for testing
-pip install --cache-dir=/var/lib/jenkins/.cache/pip -r requirements.txt
+pip install --cache-dir=/var/lib/jenkins/.cache/pip -r requirements.txt -v
 python -m pip install --upgrade pip
 
 # Deactivate the virtual environment after the tests are complete
