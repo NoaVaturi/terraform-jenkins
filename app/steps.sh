@@ -10,7 +10,7 @@ source env/bin/activate
 
 # Install dependencies from requirements.txt for testing
 pip install --cache-dir=/var/lib/jenkins/.cache/pip -r app/requirements.txt
-
+python -m pip install --upgrade pip
 
 # Deactivate the virtual environment after the tests are complete
 deactivate
