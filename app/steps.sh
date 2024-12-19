@@ -9,7 +9,7 @@ python3 -m venv env
 source env/bin/activate  
 
 # Install dependencies from requirements.txt for testing
-pip install --cache-dir=/var/lib/jenkins/.cache/pip -r ../requirements.txt
+pip install --cache-dir=/var/lib/jenkins/.cache/pip -r app/requirements.txt
 
 
 # Deactivate the virtual environment after the tests are complete
