@@ -2,7 +2,7 @@
 .pytest_cache/
 __pycache__/
 app.pyc
-.terraform/
+.terraform/*
 terraform.tfstate
 terraform.tfstate.backup
 .terraform.lock.hcl
