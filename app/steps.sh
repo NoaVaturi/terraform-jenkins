@@ -1,11 +1,12 @@
 
 #!/bin/bash
 
-# Create and activate a virtual environment for testing in Jenkins
-mkdir -p env
-cd env
+# Change to the directory where the script is located
+cd "$(dirname "$0")" 
 
-if [ ! -d "env" ]; then
+mkdir -p env
+
+if [ ! -d "env/bin" ]; then
     python3 -m venv env
 else
     echo "Virtual environment already exists."    
