@@ -25,7 +25,10 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'bash -c "source env/bin/activate && pytest app/test_app.py"'
+                sh '''
+                   source env/bin/activate
+                   pytest app/test_app.py
+                '''
             }
         }
 

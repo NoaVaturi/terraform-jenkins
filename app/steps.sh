@@ -1,10 +1,15 @@
 
 #!/bin/bash
 
-# Change to the directory where the script is located
-cd "$(dirname "$0")" 
+set -e
 
+echo "Changing to script directory..."
+cd "$(dirname "$0")" 
+echo "Current directory: $(pwd)"
+
+echo "Creating virtual environment..."
 mkdir -p env
+
 
 if [ ! -d "env/bin" ]; then
     python3 -m venv env
@@ -12,6 +17,8 @@ else
     echo "Virtual environment already exists."    
 fi
 
+
+echo "Activating virtual environment..."
 source env/bin/activate  
 
 echo "Current directory: $(pwd)"
@@ -24,7 +31,8 @@ else
     exit 1
 fi
 
+
+echo "Upgrading pip..."
 python -m pip install --upgrade pip
 
-# Deactivate the virtual environment after the tests are complete
 deactivate
