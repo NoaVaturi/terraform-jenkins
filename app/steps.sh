@@ -3,11 +3,10 @@
 
 set -xe
 
-echo "Changing to script directory..."
 cd "$(dirname "$0")" 
-echo "Current directory: $(pwd)"
+echo "Changed to directory: $(pwd)"
 
-echo "Creating virtual environment..."
+
 mkdir -p env
 
 
@@ -18,16 +17,20 @@ else
 fi
 
 
-echo "Activating virtual environment..."
+echo "Activating virtual environment."
 source env/bin/activate  
+
+echo "Using Python from: $(which python)"
+echo "Python version: $(python --version)"
 
 echo "Current directory: $(pwd)"
 
+
 if [ -f "requirements.txt" ]; then
-    echo "Found requirements.txt, installing dependencies..."
+    echo "Found requirements.txt, installing dependencies."
     pip install --cache-dir=/var/lib/jenkins/.cache/pip -r requirements.txt -v
 else
-    echo "requirements.txt not found!"
+    echo "requirements.txt not found."
     exit 1
 fi
 

@@ -25,10 +25,11 @@ pipeline {
         stage('Setup') {
             steps {
                 sh 'ls -al'
-                sh 'chmod +x ./app/steps.sh'
-                sh './app/steps.sh'
+                sh '''
+                chmod +x ./app/steps.sh
+                ./app/steps.sh
+                '''
                 
-
                 withCredentials([file(credentialsId: KUBECONFIG_CREDENTIALS_ID, variable: 'KUBECONFIG')]) {
                     sh 'export KUBECONFIG=$KUBECONFIG'
                     sh 'aws sts get-caller-identity'
