@@ -25,7 +25,7 @@ echo "Current directory: $(pwd)"
 
 if [ -f "requirements.txt" ]; then
     echo "Found requirements.txt, installing dependencies..."
-    pip install --cache-dir=/var/lib/jenkins/.cache/pip -r app/requirements.txt -v
+    pip install --cache-dir=/var/lib/jenkins/.cache/pip -r requirements.txt -v
 else
     echo "requirements.txt not found!"
     exit 1
