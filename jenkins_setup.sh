@@ -31,8 +31,9 @@ sudo curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.23.6/
 sudo chmod +x ./kubectl
 sudo mkdir -p $HOME/bin && sudo cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
 
-# Install Python 3 
+# Install Python 3 & pip
 sudo dnf install -y python3
+sudo dnf install -y python3-pip
 
 # Reboot to ensure all changes take effect
 sudo reboot
