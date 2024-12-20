@@ -18,12 +18,11 @@ pipeline {
         stage('Setup') {
             steps {
                 sh 'export PATH=$PATH:/var/lib/jenkins/.local/bin'
-                sh'python3 -m pip install --upgrade pip && pip install --cache-dir=/var/lib/jenkins/.cache/pip -r app/requirements.txt -v'
+                sh 'python3 -m pip install --upgrade pip && pip install -r app/requirements.txt'
                 
                 withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
                    sh '''
-                     chmod 644 ${KUBECONFIG}  
-                     export KUBECONFIG=${KUBECONFIG} 
+                     chmod 644 ${KUBECONFIG}
                      aws sts get-caller-identity  
                      kubectl config get-contexts --kubeconfig=${KUBECONFIG}  
                     '''
