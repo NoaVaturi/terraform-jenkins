@@ -5,7 +5,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'vnoah/flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT.take(7)}"
-        KUBECONFIG_CREDENTIALS_ID = 'kubeconfig-creds'
+        KUBECONFIG = 'kubeconfig-creds'
     }
 
     stages {
@@ -24,13 +24,13 @@ pipeline {
         }
         stage('Setup') {
             steps {
-                sh 'ls -al'
                 sh '''
                   chmod +x ./app/steps.sh
                   ./app/steps.sh
                 '''
                 
-                withCredentials([file(credentialsId: KUBECONFIG_CREDENTIALS_ID, variable: 'KUBECONFIG')]) {
+                withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
+                    sh 'chmod 644 ${KUBECONFIG}'
                     sh 'export KUBECONFIG=$KUBECONFIG'
                     sh 'aws sts get-caller-identity'
                     sh 'kubectl config get-contexts --kubeconfig=${KUBECONFIG}'
@@ -41,7 +41,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                   source env/bin/activate
+                   source env_app/env/bin/activate
                    pytest app/test_app.py
                 '''
             }
