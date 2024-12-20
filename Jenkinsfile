@@ -8,13 +8,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout SCM') {
-            steps {
-               deleteDir()  // Clean the workspace before checking out the code
-               git url: 'https://github.com/NoaVaturi/terraform-jenkins', branch: 'main'
-            }
-        }
-    
         stage('Setup') {
             steps {
                 sh 'chmod +x steps.sh'
@@ -32,7 +25,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'bash -c "source app/env/bin/activate && pytest test_app.py"'
+                sh 'bash -c "source env_app/env/bin/activate && pytest test_app.py"'
             }
         }
 
