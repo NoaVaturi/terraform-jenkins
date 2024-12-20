@@ -9,8 +9,14 @@ pipeline {
     }
 
     stages {
+        stage('Cleanup') {
+           steps {
+              sh 'rm -rf *'  // Clean the workspace by removing everything
+            }
+        }
         stage('Setup') {
             steps {
+                sh 'ls -al'
                 sh 'chmod +x ./app/steps.sh'
                 sh './app/steps.sh'
                 

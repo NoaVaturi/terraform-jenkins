@@ -1,7 +1,7 @@
 
 #!/bin/bash
 
-set -e
+set -xe
 
 echo "Changing to script directory..."
 cd "$(dirname "$0")" 
@@ -23,9 +23,9 @@ source env/bin/activate
 
 echo "Current directory: $(pwd)"
 
-if [ -f "../app/requirements.txt" ]; then
+if [ -f "requirements.txt" ]; then
     echo "Found requirements.txt, installing dependencies..."
-    pip install --cache-dir=/var/lib/jenkins/.cache/pip -r ../app/requirements.txt -v
+    pip install --cache-dir=/var/lib/jenkins/.cache/pip -r app/requirements.txt -v
 else
     echo "requirements.txt not found!"
     exit 1
