@@ -17,15 +17,14 @@ pipeline {
     
         stage('Setup') {
             steps {
-                sh 'export PATH=$PATH:/var/lib/jenkins/.local/bin'
-                sh 'python3 -m pip install --upgrade pip && pip install -r app/requirements.txt'
+                sh 'chmod +x steps.sh'
+                sh './steps.sh'
                 
                 withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
                    sh '''
-                     echo "KUBECONFIG is: $KUBECONFIG"
-                     chmod 644 $KUBECONFIG
+                     chmod 644 ${KUBECONFIG}
                      aws sts get-caller-identity  
-                     kubectl config get-contexts --kubeconfig=$KUBECONFIG  
+                     kubectl config get-contexts --kubeconfig=${KUBECONFIG}  
                     '''
                 }
             }
@@ -33,7 +32,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'pytest app/test_app.py'
+                sh 'bash -c "source app/env/bin/activate && pytest test_app.py"'
             }
         }
 
