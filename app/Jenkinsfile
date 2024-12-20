@@ -14,6 +14,20 @@ pipeline {
               sh 'rm -rf *'  // Clean the workspace by removing everything
             }
         }
+        stage('Checkout SCM') {
+            steps {
+                // Checkout SCM is done automatically by Jenkins, but we can still verify the workspace
+                sh 'git status'  // Optional: To see the current status of the repository
+            }
+        }
+
+        // Verify workspace contents after checkout
+        stage('Verify Workspace') {
+            steps {
+                // List all files in the workspace to verify the project files are checked out
+                sh 'ls -al /var/lib/jenkins/workspace/terraform-jenkins'
+            }
+        }
         stage('Setup') {
             steps {
                 sh 'ls -al'
