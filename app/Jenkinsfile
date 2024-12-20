@@ -15,19 +15,10 @@ pipeline {
                git url: 'https://github.com/NoaVaturi/terraform-jenkins', branch: 'main'
             }
         }
-        // Verify workspace contents after checkout
-        stage('Verify Workspace') {
-            steps {
-                // List all files in the workspace to verify the project files are checked out
-                sh 'ls -al /var/lib/jenkins/workspace/terraform-jenkins'
-            }
-        }
+    
         stage('Setup') {
             steps {
-                sh '''
-                  chmod +x ./app/steps.sh
-                  ./app/steps.sh
-                '''
+                sh'python3 -m pip install --upgrade pip && pip install --cache-dir=/var/lib/jenkins/.cache/pip -r app/requirements.txt -v'
                 
                 withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
                     sh 'chmod 644 ${KUBECONFIG}'
@@ -40,10 +31,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh '''
-                   source env_app/env/bin/activate
-                   pytest app/test_app.py
-                '''
+                sh 'pytest app/test_app.py'
             }
         }
 
