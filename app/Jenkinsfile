@@ -9,18 +9,12 @@ pipeline {
     }
 
     stages {
-        stage('Cleanup') {
-           steps {
-              sh 'rm -rf *'  // Clean the workspace by removing everything
-            }
-        }
         stage('Checkout SCM') {
             steps {
-                // Checkout SCM is done automatically by Jenkins, but we can still verify the workspace
-                sh 'git status'  // Optional: To see the current status of the repository
+               deleteDir()  // Clean the workspace before checking out the code
+               git url: 'https://github.com/NoaVaturi/terraform-jenkins', branch: 'main'
             }
         }
-
         // Verify workspace contents after checkout
         stage('Verify Workspace') {
             steps {
