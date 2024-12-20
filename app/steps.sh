@@ -7,7 +7,7 @@ cd env_app
 python3 -m venv env  
 source env/bin/activate  
 
-python3 -m pip install --upgrade pip && pip install -r app/requirements.txt -v
+python3 -m pip install --upgrade pip && pip install -r ../app/requirements.txt -v
 
 
 if [ -n "$VIRTUAL_ENV" ]; then
