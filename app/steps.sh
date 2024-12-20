@@ -17,19 +17,19 @@ else
 fi
 
 
-echo "Using Python from: $(which python)"
-echo "Python version: $(python --version)"
+echo "Using Python from: $(which python3)"
+echo "Python version: $(python3 --version)"
 
 
 echo "Activating virtual environment."
 source env/bin/activate  
 
 
-python -m pip install --upgrade pip
+python3 -m pip install --upgrade pip
 
 
-echo "Environment activated. Using Python from: $(which python)"
-echo "Current Python version: $(python --version)"
+echo "Environment activated. Using Python from: $(which python3)"
+echo "Current Python version: $(python3 --version)"
 
 
 
