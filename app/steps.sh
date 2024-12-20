@@ -7,14 +7,16 @@ cd "$(dirname "$0")/.."
 echo "Changed to project root directory: $(pwd)"
 
 
-mkdir -p env
+echo "Removing existing virtual environment."
+rm -rf env
 
 
-if [ ! -d "env/bin" ]; then
-    python3 -m venv env
-else
-    echo "Virtual environment already exists."    
-fi
+echo "Cleaning up .pyc files."
+find . -name "*.pyc" -exec rm -f {} \;
+
+
+echo "Creating virtual environment."
+python3 -m venv env
 
 
 echo "Using Python from: $(which python3)"
@@ -32,17 +34,16 @@ echo "Environment activated. Using Python from: $(which python3)"
 echo "Current Python version: $(python3 --version)"
 
 
-
-if [ -f "app/requirements.txt" ]; then
-    echo "Found requirements.txt, installing dependencies."
-    pip install --cache-dir=/var/lib/jenkins/.cache/pip -r app/requirements.txt -v
-else
-    echo "requirements.txt not found."
-    exit 1
-fi
+pip install -r app/requirements.txt -v
 
 
 echo "Deactivating virtual environment."
-deactivate
+if [ -n "$VIRTUAL_ENV" ]; then
+    deactivate
+    echo "Virtual environment deactivated."
+else
+    echo "Virtual environment was not activated."
+fi
+
 
 echo "Virtual environment deactivated."
