@@ -22,9 +22,10 @@ pipeline {
                 
                 withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
                    sh '''
-                     chmod 644 ${KUBECONFIG}
+                     echo "KUBECONFIG is: $KUBECONFIG"
+                     chmod 644 $KUBECONFIG
                      aws sts get-caller-identity  
-                     kubectl config get-contexts --kubeconfig=${KUBECONFIG}  
+                     kubectl config get-contexts --kubeconfig=$KUBECONFIG  
                     '''
                 }
             }
