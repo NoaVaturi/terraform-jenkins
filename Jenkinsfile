@@ -47,8 +47,10 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                        sh "kubectl config use-context staging-context --kubeconfig=${KUBECONFIG}"
-                        sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --kubeconfig=${KUBECONFIG}"
+                        withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
+                            sh "kubectl config use-context staging-context"
+                            sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
+                        }
                     }
                 }
             }
@@ -69,8 +71,12 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                script {
-                    sh "kubectl config use-context production-context --kubeconfig=${KUBECONFIG}"
-                    sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --kubeconfig=${KUBECONFIG}"
+                    withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
+                        withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
+                            sh "kubectl config use-context production-context"
+                            sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
+                        }
+                    }
                 }  
             }    
         }
