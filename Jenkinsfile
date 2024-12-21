@@ -12,7 +12,7 @@ pipeline {
             steps {
                 sh 'chmod +x steps.sh'
                 sh './steps.sh'
-                
+
                 withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
                     sh '''
                      chmod 644 ${KUBECONFIG}
