@@ -14,7 +14,7 @@ pipeline {
                 sh './steps.sh'
                 
                 withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                   sh '''
+                    sh '''
                      chmod 644 ${KUBECONFIG}
                      aws sts get-caller-identity  
                      kubectl config get-contexts --kubeconfig=${KUBECONFIG}  
@@ -25,7 +25,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'bash -c "source env_app/env/bin/activate && pytest test_app.py"'
+                sh 'bash -c "source app/env/bin/activate && pytest test_app.py"'
             }
         }
 

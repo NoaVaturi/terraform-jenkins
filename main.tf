@@ -1,9 +1,10 @@
 
 terraform {
   backend "s3" {
-    bucket = "terraform-eks-state-bucket"
-    region = "us-east-2"
-    key    = "eks/terraform.tfstate"
+    bucket  = "state-bucket-terraform-jenkins"
+    region  = "us-east-2"
+    key     = "terraform/terraform.tfstate"
+    encrypt = true
   }
 }
 
@@ -129,11 +130,11 @@ resource "aws_iam_instance_profile" "jenkins_instance_profile" {
 
 
 resource "aws_instance" "jenkins_instance" {
-  ami           = data.aws_ami.latest-amazon-linux-2023-image.id
-  instance_type = "t3.small"
-  key_name      = "jenkins-server-key"
-  subnet_id     = data.aws_subnet.subnet_a.id
-  security_groups = [aws_security_group.jenkins_sg.id]
+  ami                 = data.aws_ami.latest-amazon-linux-2023-image.id
+  instance_type       = "t3.small"
+  key_name            = "jenkins-server-key"
+  subnet_id           = data.aws_subnet.subnet_a.id
+  security_groups     = [aws_security_group.jenkins_sg.id]
   iam_instance_profile = aws_iam_instance_profile.jenkins_instance_profile.name 
   user_data           = "${file("jenkins_setup.sh")}"
 
