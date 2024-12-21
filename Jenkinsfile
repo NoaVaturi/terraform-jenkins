@@ -5,7 +5,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'vnoah/flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT.take(7)}"
-        KUBECONFIG = credentials('kubeconfig-creds')
+        KUBECONFIG = '/home/ec2-user/.kube/config'
     }
 
     stages {
@@ -15,7 +15,7 @@ pipeline {
                 sh './steps.sh'
 
                 sh 'chmod 644 $KUBECONFIG'
-                sh 'kubectl config get-contexts'
+                sh 'kubectl config get-contexts --kubeconfig=${KUBECONFIG}'
             }
         }
 
@@ -50,8 +50,9 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 script {
-                    sh "kubectl config use-context staging-context"
-                    sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
+                    sh "kubectl config use-context staging-context --kubeconfig=${KUBECONFIG}"
+                    sh "kubectl get deployment flask-app --kubeconfig=${KUBECONFIG}"
+                    sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --kubeconfig=${KUBECONFIG}"
                 }
             }
         }
