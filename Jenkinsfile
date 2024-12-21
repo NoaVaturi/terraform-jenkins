@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh 'echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USER" --password-stdin https://index.docker.io/v1/'
+                        sh 'docker login --username $DOCKER_USER --password-stdin <<< "$DOCKER_PASSWORD"'
                         echo "Logged into DockerHub successfully."
                         
                         sh 'docker push ${IMAGE_TAG}'
@@ -54,8 +54,10 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 script {
-                   sh "kubectl config use-context staging-context --kubeconfig=${KUBECONFIG}"
-                   sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
+                   withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
+                        sh "kubectl config use-context staging-context --kubeconfig=${KUBECONFIG}"
+                        sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
+                    }
                 }
             }
         }
@@ -75,8 +77,10 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                script {
-                  sh "kubectl config use-context production-context --kubeconfig=${KUBECONFIG}"
-                  sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
+                  withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
+                        sh "kubectl config use-context production-context --kubeconfig=${KUBECONFIG}"
+                        sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
+                    }
                 }  
             }
                  
