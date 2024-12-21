@@ -47,13 +47,13 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                        withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
-                            sh "kubectl config use-context staging-context"
-                            sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
-                        }
+                        sh '''
+                          kubectl config use-context staging-context
+                          kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}
+                        '''
                     }
                 }
-            }
+            } 
         }
 
         stage('Acceptance Test in Staging') {
@@ -73,8 +73,8 @@ pipeline {
                script {
                     withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
                         withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
-                            sh "kubectl config use-context production-context"
-                            sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
+                            sh('kubectl config use-context production-context')
+                            sh('kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}')
                         }
                     }
                 }  
