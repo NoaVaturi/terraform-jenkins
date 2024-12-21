@@ -5,6 +5,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'vnoah/flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.GIT_COMMIT.take(7)}"
+        KUBECONFIG = credentials('kubeconfig-creds')
     }
 
     stages {
@@ -13,13 +14,8 @@ pipeline {
                 sh 'chmod +x steps.sh'
                 sh './steps.sh'
 
-                withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                    sh '''
-                     chmod 644 ${KUBECONFIG}
-                     aws sts get-caller-identity  
-                     kubectl config get-contexts --kubeconfig=${KUBECONFIG}  
-                    '''
-                }
+                sh 'chmod 644 $KUBECONFIG'
+                sh 'kubectl config get-contexts --kubeconfig=$KUBECONFIG'
             }
         }
 
@@ -54,10 +50,8 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 script {
-                   withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                        sh "kubectl config use-context staging-context --kubeconfig=${KUBECONFIG}"
-                        sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
-                    }
+                    sh "kubectl config use-context staging-context --kubeconfig=$KUBECONFIG"
+                    sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
                 }
             }
         }
@@ -77,13 +71,10 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                script {
-                  withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                        sh "kubectl config use-context production-context --kubeconfig=${KUBECONFIG}"
-                        sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
-                    }
+                    sh "kubectl config use-context production-context --kubeconfig=$KUBECONFIG"
+                    sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
                 }  
-            }
-                 
+            }    
         }
     }
 
