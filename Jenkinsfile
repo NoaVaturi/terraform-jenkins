@@ -15,7 +15,7 @@ pipeline {
                 sh './steps.sh'
 
                 sh 'chmod 644 $KUBECONFIG'
-                sh 'kubectl config get-contexts --kubeconfig=$KUBECONFIG'
+                sh 'kubectl config get-contexts'
             }
         }
 
@@ -50,7 +50,7 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 script {
-                    sh "kubectl config use-context staging-context --kubeconfig=$KUBECONFIG"
+                    sh "kubectl config use-context staging-context"
                     sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
                 }
             }
@@ -71,7 +71,7 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                script {
-                    sh "kubectl config use-context production-context --kubeconfig=$KUBECONFIG"
+                    sh "kubectl config use-context production-context"
                     sh "kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}"
                 }  
             }    
