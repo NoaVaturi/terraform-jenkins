@@ -51,7 +51,8 @@ pipeline {
                         sh '''
                           export KUBECONFIG=${KUBECONFIG}
                           kubectl config use-context staging-context
-                          kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}
+                          kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --namespace=default
+                          kubectl apply -f deployment.yml
                         '''
                     }
                 }
@@ -78,7 +79,8 @@ pipeline {
                         sh '''
                           export KUBECONFIG=${KUBECONFIG}
                           kubectl config use-context production-context
-                          kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}
+                          kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --namespace=default
+                          kubectl apply -f deployment.yml
                         '''
                     }
                 }  
