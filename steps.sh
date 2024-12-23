@@ -7,7 +7,13 @@ cd app
 
 if [ ! -d "env" ]; then
     python3 -m venv env
+    echo "Virtual environment created in: $(pwd)/env"
+else
+    echo "Virtual environment already exists."    
 fi
+
+echo "Directory contents of app/ after virtualenv creation:"
+ls -la
 
 source env/bin/activate  
 
