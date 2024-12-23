@@ -53,6 +53,7 @@ pipeline {
                           kubectl config use-context staging-context
                           kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --namespace=default
                         '''
+                        sh 'kubectl get svc flask-app-service --namespace=default'
                     }
                 }
             } 
