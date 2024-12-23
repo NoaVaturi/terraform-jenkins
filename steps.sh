@@ -15,10 +15,15 @@ echo "Virtual environment created in: $(pwd)/env"
 
 ls -la env/bin/
 
+if [ ! -f "env/bin/activate" ]; then
+    echo "Error: activate script not found in env/bin/"
+    exit 1
+fi
+
 source env/bin/activate  
 
-echo "Using Python: $(which python)"
-echo "Python Version: $(python --version)"
+echo "Using Python: $(which python3)"
+echo "Python Version: $(python3 --version)"
 
 # Install dependencies from requirements.txt for testing
 python3 -m pip install --upgrade pip && pip install --cache-dir=/var/lib/jenkins/.cache/pip -r ../requirements.txt
