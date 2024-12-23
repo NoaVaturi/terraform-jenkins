@@ -47,6 +47,7 @@ pipeline {
             steps {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
+                        sh 'chmod 644 $KUBECONFIG'
                         sh '''
                           export KUBECONFIG=${KUBECONFIG}
                           kubectl config use-context staging-context
@@ -73,6 +74,7 @@ pipeline {
             steps {
                script {
                     withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
+                        sh 'chmod 644 $KUBECONFIG'
                         sh '''
                           export KUBECONFIG=${KUBECONFIG}
                           kubectl config use-context production-context
