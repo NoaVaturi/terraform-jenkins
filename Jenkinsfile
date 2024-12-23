@@ -60,15 +60,15 @@ pipeline {
 
         stage('Acceptance Test in Staging') {
             steps {
-                script {
+               script {
+                  def service = sh(script: "kubectl get svc flask-app-service --namespace=default -o jsonpath=\"{.status.loadBalancer.ingress[0].hostname}:{.spec.ports[0].port}\"", returnStdout: true).trim()
+                  echo "Service URL: ${service}"
 
-                    def service = sh(script: "kubectl get svc flask-app-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}:{.spec.ports[0].port}'", returnStdout: true).trim()
-                    echo "${service}"
-
-                    sh "k6 run -e SERVICE=${service} acceptance-test.js"
+                  sh "k6 run -e SERVICE=${service} acceptance-test.js"
                 }
             }
         }
+
 
         stage('Deploy to Production') {
             steps {
