@@ -11,6 +11,10 @@ sudo dnf install jenkins -y
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 
+# Open firewall port for Jenkins
+sudo firewall-cmd --zone=public --add-port=8080/tcp --permanent
+sudo firewall-cmd --reload
+
 # Install Git
 sudo dnf install git -y
 
@@ -39,3 +43,6 @@ sudo dnf install -y python3-pip
 sudo systemctl restart jenkins
 
 
+# Update kubeconfig
+aws eks --region us-east-2 update-kubeconfig --name staging-cluster --alias staging-context --role-arn arn:aws:iam::098211963825:role/Jenkins-Role
+aws eks --region us-east-2 update-kubeconfig --name production-cluster --alias production-context --role-arn arn:aws:iam::098211963825:role/Jenkins-Role
