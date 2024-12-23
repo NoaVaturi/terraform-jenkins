@@ -15,6 +15,7 @@ spec:
     spec:
       containers:
       - name: flask-app
+        image: vnoah/flask-app:${IMAGE_TAG} 
         ports:
         - containerPort: 5000
        
