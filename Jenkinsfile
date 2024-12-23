@@ -48,6 +48,8 @@ pipeline {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
                         sh '''
+                          export KUBECONFIG=${KUBECONFIG}
+                          chmod 644 $KUBECONFIG
                           kubectl config use-context staging-context
                           kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}
                         '''
@@ -72,10 +74,12 @@ pipeline {
             steps {
                script {
                     withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                        withEnv(["KUBECONFIG=${KUBECONFIG}"]) {
-                            sh('kubectl config use-context production-context')
-                            sh('kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}')
-                        }
+                        sh '''
+                          export KUBECONFIG=${KUBECONFIG}
+                          chmod 644 $KUBECONFIG
+                          kubectl config use-context production-context
+                          kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}
+                        '''
                     }
                 }  
             }    
