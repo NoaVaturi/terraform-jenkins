@@ -48,8 +48,7 @@ pipeline {
                 script {
                     withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
                         sh '''
-                          export KUBECONFIG=${KUBECONFIG}
-                          chmod 644 $KUBECONFIG
+                          aws eks --region us-east-2 update-kubeconfig --name staging-cluster --alias staging-context --role-arn arn:aws:iam::098211963825:role/Jenkins-Role
                           kubectl config use-context staging-context
                           kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}
                         '''
@@ -75,8 +74,7 @@ pipeline {
                script {
                     withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
                         sh '''
-                          export KUBECONFIG=${KUBECONFIG}
-                          chmod 644 $KUBECONFIG
+                          aws eks --region us-east-2 update-kubeconfig --name production-cluster --alias production-context --role-arn arn:aws:iam::098211963825:role/Jenkins-Role
                           kubectl config use-context production-context
                           kubectl set image deployment/flask-app flask-app=${IMAGE_TAG}
                         '''
