@@ -5,17 +5,20 @@
 mkdir -p app
 cd app
 
-if [ ! -d "env" ]; then
-    python3 -m venv env
-    echo "Virtual environment created in: $(pwd)/env"
-else
-    echo "Virtual environment already exists."    
+if [ -d "env" ]; then
+    echo "Removing existing virtual environment..."
+    rm -rf env
 fi
 
-echo "Directory contents of app/ after virtualenv creation:"
-ls -la
+python3 -m venv env
+echo "Virtual environment created in: $(pwd)/env"
+
+ls -la env/bin/
 
 source env/bin/activate  
+
+echo "Using Python: $(which python)"
+echo "Python Version: $(python --version)"
 
 # Install dependencies from requirements.txt for testing
 python3 -m pip install --upgrade pip && pip install --cache-dir=/var/lib/jenkins/.cache/pip -r ../requirements.txt
