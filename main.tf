@@ -138,7 +138,7 @@ data "aws_ami" "latest-amazon-linux-2023-image" {
   owners      = ["amazon"]
   filter {
     name   = "name"
-    values = ["al2023-ami-2023.6.20241209.0-kernel-6.1-x86_64"]  
+    values = ["Amazon Linux 2023 AMI*"]  
   }
   filter {
     name   = "virtualization-type"
@@ -163,7 +163,7 @@ resource "aws_instance" "jenkins_instance" {
   subnet_id           = data.aws_subnet.subnet_a.id
   security_groups     = [aws_security_group.jenkins_sg.id]
   iam_instance_profile = aws_iam_instance_profile.jenkins_instance_profile.name 
-  user_data           = "${file("jenkins_setup.sh")}"
+  user_data           = file("jenkins_setup.sh")
   
   lifecycle {
     prevent_destroy = true
