@@ -141,6 +141,10 @@ data "aws_ami" "latest-amazon-linux-2023-image" {
     values = ["al2023-ami*"]  
   }
   filter {
+    name   = "architecture"
+    values = ["x86_64"] 
+  }
+  filter {
     name   = "virtualization-type"
     values = ["hvm"]
   }
@@ -151,10 +155,6 @@ resource "aws_iam_instance_profile" "jenkins_instance_profile" {
   role = "Jenkins-Role"  
 }
 
-resource "aws_eip" "jenkins_eip" {
-  instance = aws_instance.jenkins_instance.id
-  domain = "vpc"
-}
 
 resource "aws_instance" "jenkins_instance" {
   ami                 = data.aws_ami.latest-amazon-linux-2023-image.id
@@ -164,10 +164,6 @@ resource "aws_instance" "jenkins_instance" {
   security_groups     = [aws_security_group.jenkins_sg.id]
   iam_instance_profile = aws_iam_instance_profile.jenkins_instance_profile.name 
   user_data           = file("jenkins_setup.sh")
-  
-  lifecycle {
-    prevent_destroy = true
-  }
  
   tags = {
     Name = "Jenkins-Instance"
@@ -303,6 +299,6 @@ output "eks_cluster_production_name" {
 }
 
 output "jenkins_instance_public_ip" {
-  value = aws_eip.jenkins_eip.public_ip
+  value = aws_instance.jenkins_instance.public_ip
 }
 
