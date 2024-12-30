@@ -11,10 +11,6 @@ sudo dnf install jenkins -y
 sudo systemctl enable jenkins
 sudo systemctl start jenkins
 
-# Open firewall port for Jenkins
-sudo firewall-cmd --zone=public --add-port=8080/tcp --permanent
-sudo firewall-cmd --reload
-
 # Install Git
 sudo dnf install git -y
 
