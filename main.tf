@@ -138,7 +138,7 @@ data "aws_ami" "latest-amazon-linux-2023-image" {
   owners      = ["amazon"]
   filter {
     name   = "name"
-    values = ["Amazon Linux 2023 AMI*"]  
+    values = ["amzn2023-ami*"]  
   }
   filter {
     name   = "virtualization-type"
