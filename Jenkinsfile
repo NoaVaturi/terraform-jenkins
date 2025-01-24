@@ -74,7 +74,6 @@ pipeline {
             steps {
                script {
                     sh '''
-                        export KUBECONFIG=${KUBECONFIG}
                         kubectl config use-context production-context
                         kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --namespace=default
                     '''

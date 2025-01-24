@@ -43,8 +43,8 @@ sudo mkdir -p /var/lib/jenkins/.kube
 sudo chown -R jenkins:jenkins /var/lib/jenkins/.kube
 
 # Update kubeconfig for staging and production clusters for Jenkins user
-aws eks --region us-east-2 update-kubeconfig --name staging-cluster --alias staging-context --role-arn arn:aws:iam::098211963825:role/Jenkins-Role --kubeconfig /var/lib/jenkins/.kube/config
-aws eks --region us-east-2 update-kubeconfig --name production-cluster --alias production-context --role-arn arn:aws:iam::098211963825:role/Jenkins-Role --kubeconfig /var/lib/jenkins/.kube/config
+aws eks --region us-east-2 update-kubeconfig --name staging-cluster --alias staging-context --kubeconfig /var/lib/jenkins/.kube/config
+aws eks --region us-east-2 update-kubeconfig --name production-cluster --alias production-context --kubeconfig /var/lib/jenkins/.kube/config
 
 # Set correct permissions for kubeconfig
 sudo chmod 600 /var/lib/jenkins/.kube/config
