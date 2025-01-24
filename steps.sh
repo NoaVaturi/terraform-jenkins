@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Create and activate a virtual environment for testing in Jenkins

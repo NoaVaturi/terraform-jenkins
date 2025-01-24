@@ -232,11 +232,6 @@ resource "aws_iam_role_policy_attachment" "eks_node_cni_policy_attach" {
   role       = aws_iam_role.eks_node_role.name
 }
 
-resource "aws_iam_role_policy_attachment" "eks_node_registry_policy_attach" {
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-  role       = aws_iam_role.eks_node_role.name
-}
-
 
 output "eks_cluster_staging_name" {
   value = aws_eks_cluster.eks_cluster_staging.name
