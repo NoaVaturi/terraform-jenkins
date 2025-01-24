@@ -46,14 +46,10 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 script {
-                    withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                        sh 'chmod 644 $KUBECONFIG'
-                        sh '''
-                          export KUBECONFIG=${KUBECONFIG}
-                          kubectl config use-context staging-context
-                          kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --namespace=default
-                        '''
-                    }
+                    sh '''
+                        kubectl config use-context staging-context
+                        kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --namespace=default
+                    ''' 
                 }
             } 
         }
@@ -61,34 +57,26 @@ pipeline {
         stage('Acceptance Test in Staging') {
             steps {
                 script {
-                   withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                       sh 'chmod 644 $KUBECONFIG'
-                       sh 'kubectl config current-context'
+                    sh 'kubectl config current-context'
 
-                       sh 'kubectl get svc flask-app-service --namespace=default'
+                    sh 'kubectl get svc flask-app-service --namespace=default'
 
-                       def service = sh(script: "kubectl get svc flask-app-service --namespace=default -o jsonpath='{.status.loadBalancer.ingress[0].hostname}:{.spec.ports[0].port}'", returnStdout: true).trim()
-                       echo "Service URL: ${service}"
+                    def service = sh(script: "kubectl get svc flask-app-service --namespace=default -o jsonpath='{.status.loadBalancer.ingress[0].hostname}:{.spec.ports[0].port}'", returnStdout: true).trim()
+                    echo "Service URL: ${service}"
 
-                       sh "k6 run -e SERVICE=${service} acceptance-test.js"
-                    }
+                    sh "k6 run -e SERVICE=${service} acceptance-test.js"
                 }
             }
         }
 
 
-
         stage('Deploy to Production') {
             steps {
                script {
-                    withCredentials([file(credentialsId: 'kubeconfig-creds', variable: 'KUBECONFIG')]) {
-                        sh 'chmod 644 $KUBECONFIG'
-                        sh '''
-                          export KUBECONFIG=${KUBECONFIG}
-                          kubectl config use-context production-context
-                          kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --namespace=default
-                        '''
-                    }
+                    sh '''
+                        kubectl config use-context production-context
+                        kubectl set image deployment/flask-app flask-app=${IMAGE_TAG} --namespace=default
+                    '''
                 }  
             }    
         }
